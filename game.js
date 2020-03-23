@@ -6,8 +6,9 @@ var ticker;
 var scalefactor;
 
 // Settings
-var slowmofactor = 1;
+var slowmofactor = 2;
 var disableclear = false;
+var gravity = true;
 
 function onload() {
     canvas = document.getElementById("maincanvas");
@@ -22,12 +23,12 @@ function onload() {
     canvas.style.width = (canvasx * scalex  ).toString() + "px";
     canvas.style.height = (canvasy * scaley ).toString() + "px";
     context = canvas.getContext("2d");
-    addactor(10, 10, 10, 10, "#000000");
-		addactor(0,canvasy - (10),canvasx,10,"#000000");
+    addactor(10, 10, 10, 10, "#000000", "circ");
+		addactor(0,canvasy - (10),canvasx,10);
     ticker = setInterval(ontick, 10 * slowmofactor);
 }
 
-function addactor(posx, posy, width, height, color = "#ffffff", text = NaN) {
+function addactor(posx, posy, width, height, color = "#000000", type = "rect", text = NaN) {
 	posx = posx * scalex
 	posy = posy * scaley
 	width  = width  * scalex
@@ -38,25 +39,33 @@ function addactor(posx, posy, width, height, color = "#ffffff", text = NaN) {
         width,
         height,
         color,
+        type,
         text
     });
 }
 
 function ontick() {
     if (disableclear == false) {
-        context.fillStyle = "#ffffff";
-        context.fillRect(0, 0, canvasx * scalex, canvasy * scaley);
+        context.clearRect(0, 0, canvasx * scalex, canvasy * scaley);
     }
     for (i = 0; i < Objects.length; i++) {
 			crashed = false;
 			for (d = 0; d < Objects.length; d++) {
 				if (collide(Objects[i],Objects[d])) {crashed = true;}
 			}
-			if (Objects[i]["posy"] + Objects[i]["height"] <= canvas.height && crashed == false) {
+			if (Objects[i]["posy"] + Objects[i]["height"] <= canvas.height && crashed == false && gravity == true) {
 				Objects[i]["posy"] += 1 * scaley;
 			}
 			context.fillStyle = Objects[i]["color"];
-			context.fillRect(Objects[i]["posx"], Objects[i]["posy"], Objects[i]["width"], Objects[i]["height"]);
+      if (Objects[i]["type"] == "rect") {
+        context.fillRect(Objects[i]["posx"], Objects[i]["posy"], Objects[i]["width"], Objects[i]["height"]);
+      }
+			else if (Objects[i]["type"] == "circ"){
+        context.beginPath()
+        context.arc(Objects[i]["posx"], Objects[i]["posy"], Objects[i]["height"], 0, 2 * Math.PI);
+        context.stroke();
+        context.fill()
+      }
     }
 }
 
