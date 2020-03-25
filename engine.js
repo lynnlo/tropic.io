@@ -73,14 +73,14 @@ function ontick() {
     context.clearRect(0, 0, canvasx * scalex, canvasy * scaley);
   }
   // Sets the background image
-  if (backgroundimage != ""){
+  if (backgroundimage != "") {
     img = new Image(screenx, screeny);
     img.src = backgroundimage;
     context.drawImage(img, 0, 0, screenx, screeny);
   }
   // Cools down jump
-  if (jumpedcool > 0){
-    if (jumpedcool < 120 && jumpedcool != 1){
+  if (jumpedcool > 0) {
+    if (jumpedcool < 120 && jumpedcool != 1) {
       jumpedcool -= 1;
     }
     jumpedcool -= 1;
@@ -88,9 +88,9 @@ function ontick() {
   // Repeats with every object
   for (i = 0; i < Objects.length; i++) {
     // Checks for collisions
-    collisionlog = []; 
+    collisionlog = [];
     for (d = 0; d < Objects.length; d++) {
-      if (d != i && Objects[i]["player"] && Objects[d]["solid"]){
+      if (d != i && Objects[i]["player"] && Objects[d]["solid"]) {
         collide(Objects[i], Objects[d], collisionlog);
       }
     }
@@ -117,21 +117,18 @@ function ontick() {
     context.fillStyle = Objects[i]["color"];
     if (Objects[i]["type"] == "rect") {
       context.fillRect(Objects[i]["posx"], Objects[i]["posy"], Objects[i]["width"], Objects[i]["height"]);
-    }
-    else if (Objects[i]["type"] == "circ") {
+    } else if (Objects[i]["type"] == "circ") {
       context.beginPath();
       context.arc(Objects[i]["posx"] + Objects[i]["width"] / 2, Objects[i]["posy"] + Objects[i]["height"] / 2, Objects[i]["width"] / 2, 0, 2 * Math.PI);
       context.stroke();
       context.fill();
-    }
-    else if (Objects[i]["type"] == "text") {
-      if (Number.isInteger(Objects[i]["height"]) || Objects[i]["height"] == NaN){
+    } else if (Objects[i]["type"] == "text") {
+      if (Number.isInteger(Objects[i]["height"]) || Objects[i]["height"] == NaN) {
         Objects[i]["height"] = "serif";
-      } 
+      }
       context.font = (Objects[i]["width"] / scalex).toString() + "px " + Objects[i]["height"].toString();
       context.fillText(Objects[i]["source"], Objects[i]["posx"], Objects[i]["posy"]);
-    }
-    else if (Objects[i]["type"] == "imag") {
+    } else if (Objects[i]["type"] == "imag") {
       img = new Image(Objects[i]["width"], Objects[i]["height"])
       img.src = Objects[i]["source"];
       context.drawImage(img, Objects[i]["posx"], Objects[i]["posy"], Objects[i]["width"], Objects[i]["height"]);
@@ -153,37 +150,35 @@ function collide(a, b, collisionlist) {
   bb = b["posy"] + b["height"];
   bl = b["posx"];
   br = b["posx"] + b["width"];
-  if (ab > bt && al < br && ar > bl && at < bt){
+  if (ab > bt && al < br && ar > bl && at < bt) {
     collisionlist["b"] = true;
   }
-  if  (at < bb && al > br && ar < bl && ab > bb){
+  if (at < bb && al > br && ar < bl && ab > bb) {
     collisionlist["t"] = true;
-  } 
-  if  (ar > bl && at < bb && ab > bt && al < bl){
+  }
+  if (ar > bl && at < bb && ab > bt && al < bl) {
     collisionlist["r"] = true;
   }
-  if  (al < br && at > bb && ab < bt && ar > br){
+  if (al < br && at > bb && ab < bt && ar > br) {
     collisionlist["l"] = true;
   }
 }
 
 // Changes the background
-function changecanvas(color, image = ""){
+function changecanvas(color, image = "") {
   if (image == "") {
     canvas.style.background = color;
     backgroundimage = "";
-  }
-  else {
+  } else {
     backgroundimage = image;
   }
 }
 
 // Adds to a list of functions to perform per tick
-function ticklist(functionname, task = "add"){
-  if (task = "add"){
+function ticklist(functionname, task = "add") {
+  if (task = "add") {
     functionlist.push(functionname);
-  }
-  else if (task = "remove"){
+  } else if (task = "remove") {
     functionlist.pop(functionname);
   }
 }
@@ -200,23 +195,22 @@ function control(a) {
       }
       if (key.which == 87 || key.which == 38 && jumpedcool <= 100 && jumped == false) {
         jp = 20;
-        if (jumpedcool <= 100 && jumped == false){
-          if (jumpedcool > 60){
+        if (jumpedcool <= 100 && jumped == false) {
+          if (jumpedcool > 60) {
             jumpedcool += jumpcooldown * 2;
-          }
-          else{
+          } else {
             jumpedcool += jumpcooldown;
           }
           jumped = true;
           for (i = 0; i < 30; i++) {
-          setTimeout(function jump() {
-            jp -= 1;
-            if (a["posy"] >= 0 && collisionlog["t"] != true) {
-              a["posy"] -= (1.5 + (0.1 * jp)) * scaley;
-            }
-          }, 10 * slowmofactor * i);
+            setTimeout(function jump() {
+              jp -= 1;
+              if (a["posy"] >= 0 && collisionlog["t"] != true) {
+                a["posy"] -= (1.5 + (0.1 * jp)) * scaley;
+              }
+            }, 10 * slowmofactor * i);
+          }
         }
-        } 
       }
       if (key.which == 65 || key.which == 37) {
         keyspressed["a"] = true;
@@ -239,8 +233,7 @@ function control(a) {
         keyspressed["d"] = false;
       }
     }
-  }
-  else {
+  } else {
     document.onkeydown = function kd(key) {
       if (key.which == 32) {
         keyspressed[" "] = true;
