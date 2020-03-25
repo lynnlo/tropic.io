@@ -2,10 +2,9 @@ var player;
 
 function onload(){
   init(document.getElementById("maincanvas"));
-  changecanvas("#efefcf");
+  loadMap_Test()
   player = addobject(0, 0, 20, 20, "#000000", "circ");
   control(player);
-  addobject(0, canvasy - (10), canvasx, 10);
-  addobject(canvasx - (10), 0, 10, canvasx);
-  addobject(25,15,100,10,NaN,"text",false,"Hello",false)
+  score = addobject(canvasx - 50, 10, 50, 10, "#000000", "text", false, "Hello",false);
+  ticklist(function(){score["source"] = jumpedcool})
 }
