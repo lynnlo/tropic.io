@@ -1,6 +1,8 @@
-// Coconut Engine V 1.2.1
+// Coconut Engine V 1.2.2
+// Created By Lynn Ong
 var Objects = [];
 var keyspressed = [];
+var functionlist = [];
 var canvas;
 var context;
 var screenx;
@@ -12,15 +14,20 @@ var scaley;
 var player;
 var ticker;
 var scalefactor;
+var jumpedcool;
 var jumped;
+var backgroundimage;
 
 // Settings
 var slowmofactor = 1;
 var movementfactor = 1;
 var disableclear = false;
-var gravity = false;
-var jumpcooldown = 60;
+var gravity = true;
+var jumpcooldown = 120;
+var startinghealth = 100;
+var damgefactor = 1;
 
+// Set up the engine
 function init(maincanvas) {
   canvas = maincanvas;
   screenx = screen.width;
@@ -39,6 +46,7 @@ function init(maincanvas) {
 
 // Adds an instance to the Objects list
 function addobject(posx, posy, width, height, color = "#000000", type = "rect", followsgravity = true, source = NaN, solid = true, player = false) {
+  health = startinghealth;
   posx = posx * scalex;
   posy = posy * scaley;
   width = width * scalex;
@@ -64,12 +72,20 @@ function ontick() {
   if (disableclear == false) {
     context.clearRect(0, 0, canvasx * scalex, canvasy * scaley);
   }
+  // Sets the background image
+  if (backgroundimage != ""){
+    img = new Image(screenx, screeny);
+    img.src = backgroundimage;
+    context.drawImage(img, 0, 0, screenx, screeny);
+  }
   // Cools down jump
-  if (jumped != 0){
-    jumped -= 1;
+  if (jumpedcool > 0){
+    if (jumpedcool < 120 && jumpedcool != 1){
+      jumpedcool -= 1;
+    }
+    jumpedcool -= 1;
   }
   // Repeats with every object
-
   for (i = 0; i < Objects.length; i++) {
     // Checks for collisions
     collisionlog = []; 
@@ -110,17 +126,20 @@ function ontick() {
     }
     else if (Objects[i]["type"] == "text") {
       if (Number.isInteger(Objects[i]["height"]) || Objects[i]["height"] == NaN){
-      Objects[i]["height"] = "serif"
+        Objects[i]["height"] = "serif";
       } 
-      context.font = (Objects[i]["width"] / scalex).toString() + "px " + Objects[i]["height"].toString()
-      context.fillText(Objects[i]["source"], Objects[i]["posx"], Objects[i]["posy"])
+      context.font = (Objects[i]["width"] / scalex).toString() + "px " + Objects[i]["height"].toString();
+      context.fillText(Objects[i]["source"], Objects[i]["posx"], Objects[i]["posy"]);
     }
     else if (Objects[i]["type"] == "imag") {
       img = new Image(Objects[i]["width"], Objects[i]["height"])
-      img.src = Objects[i]["source"]
-      context.drawImage(img, Objects[i]["posx"], Objects[i]["posy"], Objects[i]["width"], Objects[i]["height"])
+      img.src = Objects[i]["source"];
+      context.drawImage(img, Objects[i]["posx"], Objects[i]["posy"], Objects[i]["width"], Objects[i]["height"]);
     }
-
+  }
+  // Does all added functions
+  for (i = 0; i < functionlist.length; i++) {
+    functionlist[i]()
   }
 }
 
@@ -149,28 +168,53 @@ function collide(a, b, collisionlist) {
 }
 
 // Changes the background
-function changecanvas(color, image = NaN){
-  canvas.style.background = color;
+function changecanvas(color, image = ""){
+  if (image == "") {
+    canvas.style.background = color;
+    backgroundimage = "";
+  }
+  else {
+    backgroundimage = image;
+  }
+}
+
+// Adds to a list of functions to perform per tick
+function ticklist(functionname, task = "add"){
+  if (task = "add"){
+    functionlist.push(functionname);
+  }
+  else if (task = "remove"){
+    functionlist.pop(functionname);
+  }
 }
 
 // Gives the player control over an object
 function control(a) {
-  jumped = 0;
+  jumpedcool = 0;
+  jumped = false;
   a["player"] = true;
   if (gravity) {
     document.onkeydown = function kd(key) {
-      if (key.which == 87 || key.which == 38 && jumped == false) {
-        jp = 0;
-        if (jumped == 0){
-          jumped = jumpcooldown;
-          for (i = 0; i < 35; i++) {
+      if (key.which == 32) {
+        keyspressed[" "] = true;
+      }
+      if (key.which == 87 || key.which == 38 && jumpedcool <= 100 && jumped == false) {
+        jp = 20;
+        if (jumpedcool <= 100 && jumped == false){
+          if (jumpedcool > 60){
+            jumpedcool += jumpcooldown * 2;
+          }
+          else{
+            jumpedcool += jumpcooldown;
+          }
+          jumped = true;
+          for (i = 0; i < 30; i++) {
           setTimeout(function jump() {
-            jp += 1;
+            jp -= 1;
             if (a["posy"] >= 0 && collisionlog["t"] != true) {
-              a["posy"] -= (3 - (0.1 * jp)) * scaley;
+              a["posy"] -= (1.5 + (0.1 * jp)) * scaley;
             }
           }, 10 * slowmofactor * i);
-        jp = 0;
         }
         } 
       }
@@ -182,6 +226,12 @@ function control(a) {
       }
     }
     document.onkeyup = function ku(key) {
+      if (key.which == 87 || key.which == 38) {
+        keyspressed[" "] = false;
+      }
+      if (key.which == 87 || key.which == 38) {
+        jumped = false;
+      }
       if (key.which == 65 || key.which == 37) {
         keyspressed["a"] = false;
       }
@@ -192,6 +242,9 @@ function control(a) {
   }
   else {
     document.onkeydown = function kd(key) {
+      if (key.which == 32) {
+        keyspressed[" "] = true;
+      }
       if (key.which == 87 || key.which == 38) {
         keyspressed["w"] = true;
       }
@@ -206,6 +259,9 @@ function control(a) {
       }
     }
     document.onkeyup = function ku(key) {
+      if (key.which == 32) {
+        keyspressed[" "] = true;
+      }
       if (key.which == 87 || key.which == 38) {
         keyspressed["w"] = false;
       }
