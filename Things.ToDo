@@ -1,0 +1,17 @@
+-Add Omidirection Collision | Engine (Done)
+  The collision detector will need to figure out what direction it is colliding in and return the direction.
+
+-Add Sound Support | Engine
+  Make the Engine capable of emiting sound.
+
+-Add Point System | Game
+  Add a point system and basic gameplay.
+
+-Add Mutiplayer Support | Game
+  Add control for differnt players.
+
+-Add Art | Game
+  Add pixel art for players and targets.
+
+-Add Sound | Game
+  Add sound to the game.
