@@ -11,17 +11,12 @@ var canvasx;
 var canvasy;
 var scalex;
 var scaley;
-var player;
 var ticker;
 var scalefactor;
 var jumpedcool;
 var jumped;
 var backgroundimage;
-var express;
-var http;
-var path;
-var socket;
-
+var colyseus;
 
 // Settings
 var slowmofactor = 1;
@@ -30,7 +25,7 @@ var disableclear = false;
 var gravity = true;
 var jumpcooldown = 120;
 var startinghealth = 100;
-var damgefactor = 1;
+var damagefactor = 1;
 
 // Set up the engine
 function init(maincanvas) {
@@ -193,8 +188,9 @@ function ticklist(functionname, task = "add"){
   }
 }
 
+// Set up the connection
 function setupserver(){
-  
+  import * as colyseus from "colyseus.js"
 }
 
 // Gives the player control over an object
