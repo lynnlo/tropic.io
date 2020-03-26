@@ -190,7 +190,7 @@ function ticklist(functionname, task = "add"){
 
 // Set up the connection
 function setupserver(){
-  import * as colyseus from "colyseus.js"
+  const express = require("express")
 }
 
 // Gives the player control over an object
