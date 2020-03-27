@@ -188,11 +188,6 @@ function ticklist(functionname, task = "add"){
   }
 }
 
-// Set up the connection
-function setupserver(){
-  //const express = require("express")
-}
-
 // Gives the player control over an object
 function control(a) {
   jumpedcool = 0;

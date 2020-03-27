@@ -1,4 +1,5 @@
 var player;
+var socket = io();
 
 function onload(){
   init(document.getElementById("maincanvas"));
@@ -7,5 +8,9 @@ function onload(){
   control(player);
   score = addobject(canvasx - 50, 10, 50, 10, "#000000", "text", false, "Hello",false);
   ticklist(function(){score["source"] = jumpedcool})
-  setupserver()
+  ticklist(function(){socket.emit("position", [player["posx"],player["posy"]])})
 }
+
+socket.on("position", function(data){
+  console.log(data);
+})
