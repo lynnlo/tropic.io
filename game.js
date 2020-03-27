@@ -1,7 +1,7 @@
 var player;
 var socket = io();
 
-function onload(){
+function onload() {
   init(document.getElementById("maincanvas"));
   loadMap_Field()
   player = addobject(0, 0, 20, 20, "#000000", "circ");
