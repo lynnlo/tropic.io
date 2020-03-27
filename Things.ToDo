@@ -7,11 +7,11 @@
 -Add Point System | Game
   Add a point system and basic gameplay.
 
--Add Mutiplayer Support | Game
-  Add control for differnt players.
+-Add Mutiplayer Support | Game 
+  Add control for differnt players and add serverside.
 
 -Add Art | Game
-  Add pixel art for players and targets.
+  Add art for players and targets.
 
 -Add Sound | Game
   Add sound to the game.

@@ -1,4 +1,4 @@
-// Coconut Engine V 1.2.2
+// Coconut Engine V 1.2.3
 // Created By Lynn Ong
 
 var Objects = [];
@@ -12,12 +12,12 @@ var canvasx;
 var canvasy;
 var scalex;
 var scaley;
-var player;
 var ticker;
 var scalefactor;
 var jumpedcool;
 var jumped;
 var backgroundimage;
+var colyseus;
 
 // Settings
 var slowmofactor = 1;
@@ -26,7 +26,7 @@ var disableclear = false;
 var gravity = true;
 var jumpcooldown = 120;
 var startinghealth = 100;
-var damgefactor = 1;
+var damagefactor = 1;
 
 // Set up the engine
 function init(maincanvas) {
@@ -91,7 +91,7 @@ function ontick() {
     // Checks for collisions
     collisionlog = [];
     for (d = 0; d < Objects.length; d++) {
-      if (d != i && Objects[i]["player"] && Objects[d]["solid"]) {
+      if (d != i && Objects[d]["solid"]){
         collide(Objects[i], Objects[d], collisionlog);
       }
     }
@@ -151,16 +151,16 @@ function collide(a, b, collisionlist) {
   bb = b["posy"] + b["height"];
   bl = b["posx"];
   br = b["posx"] + b["width"];
-  if (ab > bt && al < br && ar > bl && at < bt) {
+  if (ab > bt - 3 && al < br && ar > bl && at < bt){
     collisionlist["b"] = true;
   }
-  if (at < bb && al > br && ar < bl && ab > bb) {
+  if  (at - 3 < bb && al < br && ar > bl && ab > bb){
     collisionlist["t"] = true;
-  }
-  if (ar > bl && at < bb && ab > bt && al < bl) {
+  } 
+  if  (ar > bl - 3 && at < bb && ab > bt && al < bl){
     collisionlist["r"] = true;
   }
-  if (al < br && at > bb && ab < bt && ar > br) {
+  if  (al - 3 < br && at < bb && ab > bt && ar > br){
     collisionlist["l"] = true;
   }
 }
@@ -182,6 +182,11 @@ function ticklist(functionname, task = "add") {
   } else if (task = "remove") {
     functionlist.pop(functionname);
   }
+}
+
+// Set up the connection
+function setupserver(){
+  //const express = require("express")
 }
 
 // Gives the player control over an object
