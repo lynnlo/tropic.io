@@ -5,8 +5,8 @@ var points = 0;
 
 function onload() {
   init(document.getElementById("maincanvas"));
-  loadMap_Field();
-  player = addobject(0, 0, 20, 20, "#000000", "circ");
+  loadMap_Cave();
+  player = addobject(0, 0, 20, 20, "#000000", "imag", true, "Images/PlayerRectangleSimple.png");
   control(player);
   score = addobject(canvasx - 50, 10, 50, 10, "#000000", "text", false, "Hello",false);
   socket.emit('initget', player);
@@ -23,11 +23,10 @@ socket.on('getallplayers', function(data){
 socket.on('getposition', function(data){
   for (i = 0; i < Objects.length; i++){
     if (Objects[i]["playerid"] == data[0]){
-      edit = Objects[i];
+      Objects[i]["posx"] = data[1][0];
+      Objects[i]["posy"] = data[1][1];
     }
   }
-  edit["posx"] = data[1][0];
-  edit["posy"] = data[1][1];
 })
 
 socket.on('newplayer', function(data){
@@ -35,5 +34,9 @@ socket.on('newplayer', function(data){
 })
 
 socket.on('lostplayer', function(data){
-  Objects.slice(Objects.indexOf(data), 1);
-}
+  for (i = 0; i < Objects.length; i++){
+    if (Objects[i]["playerid"] == data && data != socket.id){
+      delete Objects[i];
+    }
+  }
+})

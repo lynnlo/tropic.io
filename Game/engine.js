@@ -33,8 +33,8 @@ function init(maincanvas) {
   canvas = maincanvas;
   screenx = screen.width;
   screeny = screen.height;
-  canvasx = screen.width / 5;
-  canvasy = screen.height / 5;
+  canvasx = screen.width / 2;
+  canvasy = screen.height / 2;
   scalex = screenx / canvasx;
   scaley = screeny / canvasy;
   canvas.width = canvasx * scalex;
