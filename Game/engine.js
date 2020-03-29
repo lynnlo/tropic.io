@@ -43,15 +43,18 @@ function init(maincanvas) {
   canvas.style.height = (canvasy * scaley).toString() + "px";
   context = canvas.getContext("2d");
   ticker = setInterval(ontick, 10 * slowmofactor);
+  ontick();
 }
 
 // Adds an instance to the Objects list
-function addobject(posx, posy, width, height, color = "#000000", type = "rect", followsgravity = true, source = NaN, solid = true, player = false) {
+function addobject(posx, posy, width, height, color = "#000000", type = "rect", followsgravity = true, source = NaN, solid = true, options = []) {
   health = startinghealth;
   posx = posx * scalex;
   posy = posy * scaley;
   width = width * scalex;
   height = height * scaley;
+  isplayer = false;
+  removeinticks = 500;
   Objects.push({
     posx,
     posy,
@@ -62,7 +65,9 @@ function addobject(posx, posy, width, height, color = "#000000", type = "rect", 
     followsgravity,
     source,
     solid,
-    player
+    isplayer,
+    removeinticks,
+    options,
   });
   return Objects[Objects.length - 1];
 }
@@ -100,7 +105,7 @@ function ontick() {
       Objects[i]["posy"] += 1 * scaley;
     }
     // Moves the controlled object
-    if (Objects[i]["player"]) {
+    if (Objects[i]["isplayer"]) {
       if (keyspressed["w"] && Objects[i]["posy"] - movementfactor * scaley >= 0 && collisionlog["t"] != true) {
         Objects[i]["posy"] -= movementfactor * scaley;
       }
@@ -188,7 +193,7 @@ function ticklist(functionname, task = "add") {
 function control(a) {
   jumpedcool = 0;
   jumped = false;
-  a["player"] = true;
+  a["isplayer"] = true;
   if (gravity) {
     document.onkeydown = function kd(key) {
       if (key.which == 32) {
