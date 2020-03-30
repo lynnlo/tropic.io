@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <h1 class="title">Tropic.io</h1>
+</head>
+
+<body>
+    <!--USERNAME BOX-->
+    <form action="/action_page.php">
+        <label for="uname">Username:</label><br>
+        <input type="text" id="uname" name="uname"><br>
+    </form>
+
+    <!--SERVER PORT-->
+    <form action="/action_page.php">
+        <label for="fname">Port Number:</label><br>
+        <input type="text" id="port" name="port"><br>
+    </form>
+
+    <!--OPINIONS-->
+    <form action="/action_page.php">
+        <label for="fname">Opinions:</label><br>
+        <input type="text" id="opinion" name="opinion"><br>
+    </form>
+    <input type="submit" value="Submit">
+
+</body>
+
+<!--GRAVITY-->
+
+<body onload="startGame()">
+    <script>
+        var myGamePiece;
+
+        function startGame() {
+            myGamePiece = new component(30, 30, "blue", 80, 75);
+            myGameArea.start();
+        }
+
+        var myGameArea = {
+            canvas: document.createElement("canvas"),
+            start: function () {
+                this.canvas.width = 300;
+                this.canvas.height = 300;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                this.interval = setInterval(updateGameArea, 20);
+            },
+            stop: function () {
+                clearInterval(this.interval);
+            },
+            clear: function () {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+        }
+
+        function component(width, height, color, x, y, type) {
+            this.type = type;
+            this.width = width;
+            this.height = height;
+            this.x = x;
+            this.y = y;
+            this.speedX = 0;
+            this.speedY = 0;
+            this.gravity = 0;
+            this.gravitySpeed = 0.35;
+            this.update = function () {
+                ctx = myGameArea.context;
+                ctx.fillStyle = color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
+            this.newPos = function () {
+                this.gravitySpeed += this.gravity;
+                this.x += this.speedX;
+                this.y += this.speedY + this.gravitySpeed;
+                this.hitBottom();
+            }
+            this.hitBottom = function () {
+                var rockbottom = myGameArea.canvas.height - this.height;
+                if (this.y > rockbottom) {
+                    this.y = rockbottom;
+                    startGame()
+                }
+            }
+
+        }
+
+        function updateGameArea() {
+            myGameArea.clear();
+            myGamePiece.newPos();
+            myGamePiece.update();
+        }
+    </script>
+
+    <!--JUMP COOLDOWN-->
+    <h6>Jump Cooldown</h6>
+    <input type="range" min="0" max="200" value="120">
+
+    <!--STARTING HEALTH-->
+    <h6>Health</h6>
+    <input type="range" min="10" max="200" value="100">
+
+    <!--DAMAGE-->
+    <h6>Damage</h6>
+    <input type="range" min="5" max="100" value="20">
+
+    <!--USERNAME BOX-->
+    <form action="/action_page.php">
+        <label for="fname">Username:</label><br>
+        <input type="text" id="username" name="username"><br>
+    </form>
+
+    <!--SERVER PORT-->
+    <form action="/action_page.php">
+        <label for="fname">Port Number:</label><br>
+        <input type="text" id="port" name="port"><br>
+    </form>
+
+    </script>
+</body>
+
+</html>
+
+<!--
+Here's the format
+- Create Server
+-- Username (Text)
+-- Server Port (Number)
+-- Opinions 
+--- Gravity (Slider 0.1 to 2; Default 1) 
+--- Jump Cooldown (Slider 0 to 200; Default 120)
+--- Starting Health (Slider 10 to 200; Default 100) 
+--- Damage (Slider 5 to 100; Default 20) 
+- Join Server
+-- Username (Text)
+-- Server Port (Number)
+Add these fields as well.
+-->
