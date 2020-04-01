@@ -1,4 +1,4 @@
-// Coconut Engine V 1.2.3
+// Coconut Engine V 1.2.4
 // Created By Lynn Ong
 
 var Objects = [];
@@ -17,14 +17,14 @@ var scalefactor;
 var jumpedcool;
 var jumped;
 var backgroundimage;
-var colyseus;
 
 // Settings
 var slowmofactor = 1;
 var movementfactor = 1;
 var disableclear = false;
 var gravity = true;
-var jumpcooldown = 120;
+var gravityfacor = 1;
+var jumpcooldown = 100;
 var startinghealth = 100;
 var damagefactor = 1;
 
@@ -55,6 +55,7 @@ function addobject(posx, posy, width, height, color = "#000000", type = "rect", 
   height = height * scaley;
   isplayer = false;
   removeinticks = 500;
+  volocity = 0;
   Objects.push({
     posx,
     posy,
@@ -67,6 +68,7 @@ function addobject(posx, posy, width, height, color = "#000000", type = "rect", 
     solid,
     isplayer,
     removeinticks,
+    volocity,
     options,
   });
   return Objects[Objects.length - 1];
@@ -86,9 +88,6 @@ function ontick() {
   }
   // Cools down jump
   if (jumpedcool > 0) {
-    if (jumpedcool < 120 && jumpedcool != 1) {
-      jumpedcool -= 1;
-    }
     jumpedcool -= 1;
   }
   // Repeats with every object
@@ -101,8 +100,12 @@ function ontick() {
       }
     }
     // Adds a gravitational pull to the object
-    if (Objects[i]["posy"] + Objects[i]["height"] <= canvas.height && collisionlog["b"] != true && gravity == true) {
-      Objects[i]["posy"] += 1 * scaley;
+    if (Objects[i]["posy"] + Objects[i]["height"] <= canvas.height && collisionlog["b"] != true && gravity == true && Objects[i]["followsgravity"] == true) {
+      Objects[i]["posy"] += gravityfacor * scaley + (0.05 * Objects[i]["volocity"]);
+      Objects[i]["volocity"] += 1;
+    }
+    else {
+      Objects[i]["volocity"] = 0;
     }
     // Moves the controlled object
     if (Objects[i]["isplayer"]) {
@@ -201,18 +204,14 @@ function control(a) {
       }
       if (key.which == 87 || key.which == 38 && jumpedcool <= 100 && jumped == false) {
         jp = 20;
-        if (jumpedcool <= 100 && jumped == false) {
-          if (jumpedcool > 60) {
-            jumpedcool += jumpcooldown * 2;
-          } else {
-            jumpedcool += jumpcooldown;
-          }
+        if (jumpedcool <= jumpcooldown * 3 && jumped == false) {
+          jumpedcool += jumpcooldown;
           jumped = true;
           for (i = 0; i < 30; i++) {
             setTimeout(function jump() {
               jp -= 1;
               if (a["posy"] >= 0 && collisionlog["t"] != true) {
-                a["posy"] -= (1.5 + (0.1 * jp)) * scaley;
+                a["posy"] -= (gravityfacor * 2 + (0.3 * jp)) * scaley;
               }
             }, 10 * slowmofactor * i);
           }

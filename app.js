@@ -16,7 +16,7 @@ http.listen(3000, function(){
     console.log("Starting Server")
 })
 
-/*
+
 io.on('connect', function(socket){
     console.log("new connection")
     socket.on('initget', function(data){
@@ -40,4 +40,4 @@ io.on('connect', function(socket){
         console.log("lost connection");
     })
 })
-*/
+
