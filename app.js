@@ -12,7 +12,7 @@ console.log(gamedir)
 app.use(express.static(gamedir))
 
 
-http.listen(3000, function(){
+http.listen(3000, function () {
     console.log("Starting Server")
 })
 
@@ -40,4 +40,3 @@ io.on('connect', function(socket){
         console.log("lost connection");
     })
 })
-

@@ -10,32 +10,36 @@ function onload() {
   control(player);
   score = addobject(canvasx - 100, 20, 40, 10, "#000000", "text", false, "Points : 0",false);
   socket.emit('initget', player);
-  ticklist(function(){score["source"] = points});
-  ticklist(function(){socket.emit('updateposition', [player["posx"], player["posy"]])});
+  ticklist(function () {
+    score["source"] = points
+  });
+  ticklist(function () {
+    socket.emit('updateposition', [player["posx"], player["posy"]])
+  });
 }
 
-socket.on('getallplayers', function(data){
-  for (i = 0; i < data.length; i++){
+socket.on('getallplayers', function (data) {
+  for (i = 0; i < data.length; i++) {
     Objects.push(data[i]);
   }
 })
 
-socket.on('getposition', function(data){
-  for (i = 0; i < Objects.length; i++){
-    if (Objects[i]["playerid"] == data[0]){
+socket.on('getposition', function (data) {
+  for (i = 0; i < Objects.length; i++) {
+    if (Objects[i]["playerid"] == data[0]) {
       Objects[i]["posx"] = data[1][0];
       Objects[i]["posy"] = data[1][1];
     }
   }
 })
 
-socket.on('newplayer', function(data){
+socket.on('newplayer', function (data) {
   Objects.push(data);
 })
 
-socket.on('lostplayer', function(data){
-  for (i = 0; i < Objects.length; i++){
-    if (Objects[i]["playerid"] == data && data != socket.id){
+socket.on('lostplayer', function (data) {
+  for (i = 0; i < Objects.length; i++) {
+    if (Objects[i]["playerid"] == data && data != socket.id) {
       delete Objects[i];
     }
   }
