@@ -25,6 +25,7 @@ io.on('connect', function(socket){
         socket.broadcast.emit('newplayer', data);
         io.to(socket.id).emit('getallplayers', players);
         players[socket.id] = data;
+        console.log(players)
     })
     socket.on('updateposition', function(data){
         socket.broadcast.emit('getposition', [socket.id, data]);
