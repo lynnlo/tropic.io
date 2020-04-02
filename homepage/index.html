@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <h1 class="title">Server Page</h1>
@@ -11,13 +11,13 @@
 <body>
 
 
-    <div class="forms">
-        <form action="/action_page.php">
-            <label for="fname">Username:</label><br>
-            <input type="text" id="username" name="username"><br>
+    <div class="forms" style="display: flex">
+        <form action="/action_page.php" class="form">
+            <label for="fname" style="margin-right: 20px;">Username:</label><br>
+            <input type="text" id="username" name="username" style="margin-right: 20px;"><br>
         </form>
 
-        <form action="/action_page.php">
+        <form action="/action_page.php" class="form">
             <label for="fname">Port Number:</label><br>
             <input type="text" id="port" name="port"><br>
         </form>
@@ -27,26 +27,25 @@
     <div class="slidecontainer">
         <div>
             <h6>Jump Cooldown</h6>
-            <input type="range" min="0" max="10" value="120" id="down" class="slider1">
+            <input type="range" min="1" max="10" value="120" id="down" class="slider2">
             <p>Value: <span id="cooldown"></span></p>
         </div>
 
         <div>
             <h6>Health</h6>
-            <input type="range" min="10" max="10" value="100" id="healthbar" class="slider2">
+            <input type="range" min="1" max="10" value="100" id="healthbar" class="slider2">
             <p>Value: <span id="health"></span></p>
         </div>
 
         <div>
             <h6>Damage</h6>
-            <input type="range" min="5" max="10" value="20" id="damages" class="slider3">
+            <input type="range" min="1" max="10" value="6" id="damages" class="slider2">
             <p>Value: <span id="damage"></span></p>
         </div>
 
     </div>
 
-    <br> <br>
-
+    <br>
     <input type="submit" value="Create Server">
 
 
@@ -67,8 +66,8 @@
             output2.innerHTML = this.value;
         }
 
-        var slider3 = document.getElementById("myRange");
-        var output3 = document.getElementById("demo");
+        var slider3 = document.getElementById("damages");
+        var output3 = document.getElementById("damage");
         output3.innerHTML = slider3.value;
 
         slider3.oninput = function () {
