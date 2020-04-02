@@ -20,7 +20,7 @@ var backgroundimage;
 
 // Settings
 var slowmofactor = 1;
-var movementfactor = 1;
+var movementfactor = 2;
 var disableclear = false;
 var gravity = true;
 var gravityfacor = 1;
@@ -101,7 +101,7 @@ function ontick() {
     }
     // Adds a gravitational pull to the object
     if (Objects[i]["posy"] + Objects[i]["height"] <= canvas.height && collisionlog["b"] != true && gravity == true && Objects[i]["followsgravity"] == true) {
-      Objects[i]["posy"] += gravityfacor * scaley + (0.05 * Objects[i]["volocity"]);
+      Objects[i]["posy"] += gravityfacor * scaley + (0.1 * Objects[i]["volocity"]);
       Objects[i]["volocity"] += 1;
     } else {
       Objects[i]["volocity"] = 0;
@@ -158,16 +158,16 @@ function collide(a, b, collisionlist) {
   bb = b["posy"] + b["height"];
   bl = b["posx"];
   br = b["posx"] + b["width"];
-  if (ab > bt - 3 && al < br && ar > bl && at < bt) {
+  if (ab > bt && al < br && ar > bl && at < bt){
     collisionlist["b"] = true;
   }
-  if (at - 3 < bb && al < br && ar > bl && ab > bb) {
+  if  (at < bb && al < br && ar > bl && ab > bb){
     collisionlist["t"] = true;
-  }
-  if (ar > bl - 3 && at < bb && ab > bt && al < bl) {
+  } 
+  if  (ar > bl && at < bb && ab > bt && al < bl){
     collisionlist["r"] = true;
   }
-  if (al - 3 < br && at < bb && ab > bt && ar > br) {
+  if  (al < br && at < bb && ab > bt && ar > br){
     collisionlist["l"] = true;
   }
 }
@@ -209,6 +209,12 @@ function control(a) {
           for (i = 0; i < 30; i++) {
             setTimeout(function jump() {
               jp -= 1;
+              collisionlog = [];
+              for (d = 0; d < Objects.length; d++) {
+                if (d != a && Objects[d]["solid"]){
+                  collide(a, Objects[d], collisionlog);
+                }
+              }
               if (a["posy"] >= 0 && collisionlog["t"] != true) {
                 a["posy"] -= (gravityfacor * 2 + (0.3 * jp)) * scaley;
               }

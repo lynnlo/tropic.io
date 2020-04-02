@@ -14,21 +14,22 @@ function onload() {
     score["source"] = points
   });
   ticklist(function () {
-    socket.emit('updateposition', [player["posx"], player["posy"]])
+    socket.emit('updateposition', [player["posx"] / scalex, player["posy"] / scaley])
   });
 }
 
 socket.on('getallplayers', function (data) {
-  for (i = 0; i < data.length; i++) {
-    Objects.push(data[i]);
-  }
+  console.log(data)
+  data.forEach(function(i){
+    Objects.push(i)
+  })
 })
 
 socket.on('getposition', function (data) {
   for (i = 0; i < Objects.length; i++) {
     if (Objects[i]["playerid"] == data[0]) {
-      Objects[i]["posx"] = data[1][0];
-      Objects[i]["posy"] = data[1][1];
+      Objects[i]["posx"] = data[1][0] * scalex;
+      Objects[i]["posy"] = data[1][1] * scaley;
     }
   }
 })
