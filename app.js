@@ -17,24 +17,24 @@ http.listen(3000, function () {
 })
 
 
-io.on('connect', function(socket){
+io.on('connect', function (socket) {
     console.log("new connection")
-    socket.on('initget', function(data){
+    socket.on('initget', function (data) {
         data["isplayer"] = false;
         data["playerid"] = socket.id;
         socket.broadcast.emit('newplayer', data);
         io.to(socket.id).emit('getallplayers', players);
         players[socket.id] = data;
     })
-    socket.on('updateposition', function(data){
+    socket.on('updateposition', function (data) {
         socket.broadcast.emit('getposition', [socket.id, data]);
         players[socket.id]["posx"] = data[0];
         players[socket.id]["posy"] = data[1];
     })
-    socket.on('printobj', function(){
+    socket.on('printobj', function () {
         console.log(players);
     })
-    socket.on('disconnecting', function(){
+    socket.on('disconnecting', function () {
         io.emit('lostplayer', socket.id);
         delete players[socket.id];
         console.log("lost connection");

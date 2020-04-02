@@ -95,7 +95,7 @@ function ontick() {
     // Checks for collisions
     collisionlog = [];
     for (d = 0; d < Objects.length; d++) {
-      if (d != i && Objects[d]["solid"]){
+      if (d != i && Objects[d]["solid"]) {
         collide(Objects[i], Objects[d], collisionlog);
       }
     }
@@ -103,8 +103,7 @@ function ontick() {
     if (Objects[i]["posy"] + Objects[i]["height"] <= canvas.height && collisionlog["b"] != true && gravity == true && Objects[i]["followsgravity"] == true) {
       Objects[i]["posy"] += gravityfacor * scaley + (0.05 * Objects[i]["volocity"]);
       Objects[i]["volocity"] += 1;
-    }
-    else {
+    } else {
       Objects[i]["volocity"] = 0;
     }
     // Moves the controlled object
@@ -159,16 +158,16 @@ function collide(a, b, collisionlist) {
   bb = b["posy"] + b["height"];
   bl = b["posx"];
   br = b["posx"] + b["width"];
-  if (ab > bt - 3 && al < br && ar > bl && at < bt){
+  if (ab > bt - 3 && al < br && ar > bl && at < bt) {
     collisionlist["b"] = true;
   }
-  if  (at - 3 < bb && al < br && ar > bl && ab > bb){
+  if (at - 3 < bb && al < br && ar > bl && ab > bb) {
     collisionlist["t"] = true;
-  } 
-  if  (ar > bl - 3 && at < bb && ab > bt && al < bl){
+  }
+  if (ar > bl - 3 && at < bb && ab > bt && al < bl) {
     collisionlist["r"] = true;
   }
-  if  (al - 3 < br && at < bb && ab > bt && ar > br){
+  if (al - 3 < br && at < bb && ab > bt && ar > br) {
     collisionlist["l"] = true;
   }
 }

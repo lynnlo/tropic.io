@@ -1,6 +1,5 @@
-
-function loadMap(map){
-  if (map == "Cave"){
+function loadMap(map) {
+  if (map == "Cave") {
     changecanvas("#a0a0a0");
     addobject(0, canvasy - (10), canvasx, 10, "#505050", "rect", false);
     addobject(60, canvasy - (30), 20, 20, "#505050", "rect", false);

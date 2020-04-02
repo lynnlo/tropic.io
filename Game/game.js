@@ -8,7 +8,7 @@ function onload() {
   loadMap("Cave");
   player = addobject(0, 0, 20, 20, "#000000", "imag", true, "Images/PlayerRectangleSimple.png");
   control(player);
-  score = addobject(canvasx - 100, 20, 40, 10, "#000000", "text", false, "Points : 0",false);
+  score = addobject(canvasx - 100, 20, 40, 10, "#000000", "text", false, "Points : 0", false);
   socket.emit('initget', player);
   ticklist(function () {
     score["source"] = points
