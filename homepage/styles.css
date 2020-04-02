@@ -14,13 +14,13 @@
 }
 
 .slidecontainer {
-/*     width: 50%; */
+    /*     width: 50%; */
     margin: 0px;
     align-self: center;
 }
 
 .slider1 {
-    
+
     width: 50%;
     height: 25px;
     background: #d3d3d3;
@@ -36,7 +36,7 @@
 }
 
 .slider1::-webkit-slider1-thumb {
-    
+
     appearance: none;
     width: 25px;
     height: 25px;
