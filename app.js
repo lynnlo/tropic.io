@@ -17,7 +17,7 @@ http.listen(3000, function () {
 })
 
 
-io.on('connect', function(socket){
+io.on('connect', function (socket) {
     console.log("new connection")
     socket.on('init', function (data){
         data["isplayer"] = false;
@@ -31,7 +31,10 @@ io.on('connect', function(socket){
         players[socket.id]["posx"] = data[0];
         players[socket.id]["posy"] = data[1];
     })
-    socket.on('disconnecting', function(){
+    socket.on('printobj', function () {
+        console.log(players);
+    })
+    socket.on('disconnect', function () {
         io.emit('lostplayer', socket.id);
         delete players[socket.id];
         console.log("lost connection");

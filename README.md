@@ -1,3 +1,3 @@
 # tropic.io
 
-Tropic.io is a game where players collect coconuts and throw it at each other.
+Tropic.io is a *multiplayer game* using *Node.js* and *Socket.io*, where the players attack each other.

@@ -91,7 +91,7 @@ function ontick() {
     // Checks for collisions
     collisionlog = [];
     for (d = 0; d < Objects.length; d++) {
-      if (d != i && Objects[d]["solid"]){
+      if (d != i && Objects[d]["solid"]) {
         collide(Objects[i], Objects[d], collisionlog);
       }
     }
