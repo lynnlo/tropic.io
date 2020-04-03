@@ -4,13 +4,13 @@
 -Add Sound Support | Engine
   Make the Engine capable of emiting sound.
 
--Add Point System | Game
+-Add Point System | Game (Progress)
   Add a point system and basic gameplay.
 
--Add Mutiplayer Support | Game 
+-Add Mutiplayer Support | Game (Done)
   Add control for differnt players and add serverside.
 
--Add Art | Game
+-Add Art | Game (Progress)
   Add art for players and targets.
 
 -Add Sound | Game

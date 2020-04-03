@@ -1,10 +1,78 @@
 body {
     padding: 0;
-    margin: 0;
+    margin: 0px;
+    align-self: center;
+    font-weight: bold;
+    font-size: 125%;
 }
 
 canvas {
     background: #eeeeee;
     display: block;
     margin: 0 auto;
+}
+
+input {
+    background: #d3d3d3;
+    font-size: 150%;
+    width : 50%;
+    opacity: 0.7;
+}
+
+input:hover {
+    opacity: 1;
+}
+
+button {
+    font-size: 150%;
+    background: rgb(36, 46, 92);
+    color: #d3d3d3;
+    border-radius: 20%;
+    opacity: 0.8;
+}
+
+* {
+    font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif';
+    text-align: center;
+}
+
+.title {
+    font-size: 150%;
+}
+
+.forms li {
+    font-size: 1.5em;
+    list-style-type: none;
+    padding: 20px;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 50%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: rgb(36, 46, 92);
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
 }

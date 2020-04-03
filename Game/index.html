@@ -1,19 +1,59 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" name="charset">
-        <title> Tropic.io </title>
-        <link rel = "stylesheet" type = "text/css" href="style.css">
-    </head>
-    <body onload = "onload()">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <h1 class="title"> Tropic.io Server Creator </h1>
+</head>
+
+<body onload = "onload_index()">
+    <script src = "engine.js"></script>
+    <script src="game.js"> </script>
+    <label>Username</label><br>
+    <input type="text" id="username"><br>
+    <br>
+    <label>Port Number</label><br>
+    <input type="text" id="port"><br>
+    <div class="slidecontainer">
         <div>
-            <script src = "Maps/Field.js"></script>
-            <script src = "Maps/Beach.js"></script>
-            <script src = "Maps/Cave.js"></script>
+            <h6>Jump Cooldown</h6>
+            <input type="range" min="0" max="120" value="60" id="down" class="slider">
+            <p>Jump Cooldown : <span id="cooldown"></span></p>
         </div>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src = "engine.js"></script>
-        <script src = "game.js"></script>
-        <canvas id = "maincanvas"> </canvas>
-    </body>
+
+        <div>
+            <h6>Movement Speed</h6>
+            <input type="range" min="1" max="20" value="10" id="move" class="slider">
+            <p>Movement Speed : <span id="movement"></span></p>
+        </div>
+        
+        <div>
+            <h6>Gravity</h6>
+            <input type="range" min="1" max="20" value="10" id="grav" class="slider">
+            <p>Gravity : <span id="gravity"></span></p>
+        </div>
+    </div>
+
+    <br>
+    <button onclick="connectgame()" style="font-weight: 500"> Deploy Server! </button>
+
+</body>
+
 </html>
+
+<!--
+Here's the format
+- Create Server
+-- Username (Text)
+-- Server Port (Number)
+-- Opinions 
+--- Gravity (Slider 0.1 to 2; Default 1) 
+--- Jump Cooldown (Slider 0 to 200; Default 120)
+--- Starting Health (Slider 10 to 200; Default 100) 
+--- Damage (Slider 5 to 100; Default 20) 
+- Join Server
+-- Username (Text)
+-- Server Port (Number)
+Add these fields as well.
+-->

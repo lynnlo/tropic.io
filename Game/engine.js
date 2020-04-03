@@ -20,13 +20,11 @@ var backgroundimage;
 
 // Settings
 var slowmofactor = 1;
-var movementfactor = 2;
+var movementfactor;
 var disableclear = false;
 var gravity = true;
-var gravityfacor = 1;
-var jumpcooldown = 100;
-var startinghealth = 100;
-var damagefactor = 1;
+var gravityfacor;
+var jumpcooldown;
 
 // Set up the engine
 function init(maincanvas) {
@@ -47,15 +45,14 @@ function init(maincanvas) {
 }
 
 // Adds an instance to the Objects list
-function addobject(posx, posy, width, height, color = "#000000", type = "rect", followsgravity = true, source = NaN, solid = true, options = []) {
-  health = startinghealth;
+function addobject(posx, posy, width, height, color = "#000000", type = "rect", followsgravity = true, source = NaN, solid = true) {
   posx = posx * scalex;
   posy = posy * scaley;
   width = width * scalex;
   height = height * scaley;
   isplayer = false;
   removeinticks = 500;
-  volocity = 0;
+  points = 0;
   Objects.push({
     posx,
     posy,
@@ -68,8 +65,7 @@ function addobject(posx, posy, width, height, color = "#000000", type = "rect", 
     solid,
     isplayer,
     removeinticks,
-    volocity,
-    options,
+    points,
   });
   return Objects[Objects.length - 1];
 }
@@ -101,11 +97,7 @@ function ontick() {
     }
     // Adds a gravitational pull to the object
     if (Objects[i]["posy"] + Objects[i]["height"] <= canvas.height && collisionlog["b"] != true && gravity == true && Objects[i]["followsgravity"] == true) {
-      Objects[i]["posy"] += gravityfacor * scaley + (0.1 * Objects[i]["volocity"]);
-      Objects[i]["volocity"] += 1;
-    }
-    else {
-      Objects[i]["volocity"] = 0;
+      Objects[i]["posy"] += gravityfacor * scaley;
     }
     // Moves the controlled object
     if (Objects[i]["isplayer"]) {
@@ -159,16 +151,28 @@ function collide(a, b, collisionlist) {
   bb = b["posy"] + b["height"];
   bl = b["posx"];
   br = b["posx"] + b["width"];
-  if (ab > bt && al < br && ar > bl && at < bt){
+  if (ab > bt - 1 && al < br && ar > bl && at < bt){
+    if (a["key"]){
+      a["touched"] = b
+    }
     collisionlist["b"] = true;
   }
-  if  (at < bb && al < br && ar > bl && ab > bb){
+  if  (at - 1 < bb && al < br && ar > bl && ab > bb){
+    if (a["key"]){
+      a["touched"] = b
+    }
     collisionlist["t"] = true;
   } 
-  if  (ar > bl && at < bb && ab > bt && al < bl){
+  if  (ar > bl - 2 && at < bb && ab > bt && al < bl){
+    if (a["key"]){
+      a["touched"] = b
+    }
     collisionlist["r"] = true;
   }
-  if  (al < br && at < bb && ab > bt && ar > br){
+  if  (al - 2 < br && at < bb && ab > bt && ar > br){
+    if (a["key"]){
+      a["touched"] = b
+    }
     collisionlist["l"] = true;
   }
 }
@@ -202,9 +206,9 @@ function control(a) {
       if (key.which == 32) {
         keyspressed[" "] = true;
       }
-      if (key.which == 87 || key.which == 38 && jumpedcool <= 100 && jumped == false) {
+      if (key.which == 87 || key.which == 38 && jumpedcool < jumpedcooldown * 2 && jumped == false) {
         jp = 20;
-        if (jumpedcool <= jumpcooldown * 3 && jumped == false) {
+        if (jumpedcool < jumpcooldown * 2 && jumped == false) {
           jumpedcool += jumpcooldown;
           jumped = true;
           for (i = 0; i < 30; i++) {
@@ -217,7 +221,7 @@ function control(a) {
                 }
               }
               if (a["posy"] >= 0 && collisionlog["t"] != true) {
-                a["posy"] -= (gravityfacor * 2 + (0.3 * jp)) * scaley;
+                a["posy"] -= (4 + (0.2 * jp)) * scaley;
               }
             }, 10 * slowmofactor * i);
           }
@@ -280,4 +284,19 @@ function control(a) {
       }
     }
   }
+}
+
+// Set's the target object
+function target(a){
+  a["key"] = true
+  a["followsgravity"] = false
+  a["type"] = "rect"
+  a["color"] = "#2020a0"
+}
+
+// Change settings
+function set_settings(jcd = 60, mf = 2, gf = 2){
+  jumpcooldown = jcd;
+  movementfactor = mf;
+  gravityfacor = gf;
 }
