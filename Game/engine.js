@@ -33,12 +33,12 @@ function init(maincanvas) {
   canvas = maincanvas;
   screenx = 1440;
   screeny = 900;
-  canvasx = screen.width / 1.5;
-  canvasy = screen.height / 1.5;
+  canvasx = screenx / 1.5;
+  canvasy = screeny / 1.5;
   canvas.width = canvasx;
   canvas.height = canvasy;
-  //canvas.style.width = (screen.width).toString() + "px";
-  //canvas.style.height = (screen.height).toString() + "px";
+  canvas.style.width = (screen.width).toString() + "px";
+  canvas.style.height = (screen.height).toString() + "px";
   context = canvas.getContext("2d");
   ticker = setInterval(ontick, 10 * slowmofactor);
   ontick();
@@ -109,15 +109,9 @@ function ontick() {
     collisionlog = [];
     for (d = 0; d < Objects.length; d++) {
       if (typeof Objects[d] !== "undefined" ){
-        try{
-          if (d != i && Objects[d]["solid"]) {
-            collide(Objects[i], Objects[d], collisionlog);
-          }
+        if (d != i && Objects[d]["solid"]) {
+          collide(Objects[i], Objects[d], collisionlog);
         }
-        catch{
-          collisionlog = [];
-        }
-        
       }
     }
     // Adds a gravitational pull to the object
@@ -168,37 +162,39 @@ function ontick() {
 
 // Checks for a collision
 function collide(a, b, collisionlist) {
-  at = a["posy"];
-  ab = a["posy"] + a["height"];
-  al = a["posx"];
-  ar = a["posx"] + a["width"];
-  bt = b["posy"];
-  bb = b["posy"] + b["height"];
-  bl = b["posx"];
-  br = b["posx"] + b["width"];
-  if (ab > bt - 2 && al < br && ar > bl && at < bt){
-    if (a["key"]){
-      a["touched"] = b
+  if (typeof a !== "undefined" ){
+    at = a["posy"];
+    ab = a["posy"] + a["height"];
+    al = a["posx"];
+    ar = a["posx"] + a["width"];
+    bt = b["posy"];
+    bb = b["posy"] + b["height"];
+    bl = b["posx"];
+    br = b["posx"] + b["width"];
+    if (ab > bt - 2 && al < br && ar > bl && at < bt){
+      if (a["key"]){
+        a["touched"] = b
+      }
+      collisionlist["b"] = true;
     }
-    collisionlist["b"] = true;
-  }
-  if  (at - 2 < bb && al < br && ar > bl && ab > bb){
-    if (a["key"]){
-      a["touched"] = b
+    if  (at - 2 < bb && al < br && ar > bl && ab > bb){
+      if (a["key"]){
+        a["touched"] = b
+      }
+      collisionlist["t"] = true;
+    } 
+    if  (ar > bl - 2 && at < bb && ab > bt && al < bl){
+      if (a["key"]){
+        a["touched"] = b
+      }
+      collisionlist["r"] = true;
     }
-    collisionlist["t"] = true;
-  } 
-  if  (ar > bl - 2 && at < bb && ab > bt && al < bl){
-    if (a["key"]){
-      a["touched"] = b
+    if  (al - 2 < br && at < bb && ab > bt && ar > br){
+      if (a["key"]){
+        a["touched"] = b
+      }
+      collisionlist["l"] = true;
     }
-    collisionlist["r"] = true;
-  }
-  if  (al - 2 < br && at < bb && ab > bt && ar > br){
-    if (a["key"]){
-      a["touched"] = b
-    }
-    collisionlist["l"] = true;
   }
 }
 
@@ -243,8 +239,10 @@ function control(a, u = 'Player') {
               jp -= 1;
               collisionlog = [];
               for (d = 0; d < Objects.length; d++) {
-                if (d != a && Objects[d]["solid"]){
-                  collide(a, Objects[d], collisionlog);
+                if (typeof Objects[d] !== "undefined" ){
+                  if (d != a && Objects[d]["solid"]){
+                    collide(a, Objects[d], collisionlog);
+                  }
                 }
               }
               if (a["posy"] >= 0 && collisionlog["t"] != true) {
