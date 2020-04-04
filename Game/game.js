@@ -1,14 +1,21 @@
 var player;
 var socket;
-var username = 'lynnlo';
+var username = '';
 var points = 0;
-var map = "";
-var slider1
-var output1
-var slider2
-var output2
+var map = 1;
+var port;
+var input1;
+var input2;
+var slider1;
+var output1;
+var slider2;
+var output2;
+var output3;
+var fs = false;
 
 function onload_index(){
+  input1 = document.getElementById("port");
+
   slider1 = document.getElementById("down");
   output1 = document.getElementById("cooldown");
   output1.innerHTML = slider1.value + " ticks";
@@ -32,60 +39,105 @@ function onload_index(){
   slider3.oninput = function () {
     output3.innerHTML = this.value + "0%";
   }
+
+  input1.value = Math.random() * 100000000000000000
+}
+
+function connectconector(){
+  pt = input1.value;
+  jcd = slider1.value;
+  mf = (slider2.value / 10) * 2;
+  gf = (slider3.value / 10) * 2;
+  window.location = "connector.html" + "?" + pt + "+" + jcd + "+" + mf + "+" + gf;
+}
+
+function change_map(){
+  removeall = true;
+  setTimeout(function(){
+    if (map == 1){
+      loadMap("Cave");
+    }
+  }, 20 * slowmofactor)
+  
+}
+
+function onload_connector(){
+  input2 = document.getElementById("username");
+  output3 = document.getElementById("link");
+
+  output3.value = window.location;
+
+  qS = decodeURIComponent(window.location.search).substr(1)
+  qS = qS.split("+")
 }
 
 function connectgame(){
-  jcd = slider1.value
-  mf = (slider2.value / 10) * 2
-  gf = (slider3.value / 10) * 2
-  window.location = "game.html" + "?" + jcd + "+" + mf + "+" + gf;
+  window.location = "game.html" + "?" + qS[0] + "+" + qS[1] + "+" + qS[2] + "+" + qS[3] + "+" + input2.value;
 }
 
 function onload_game() {
   socket = io();
+
   qS = decodeURIComponent(window.location.search).substr(1)
-  qS = qS.split("+")
-  set_settings(parseFloat(qS[0]), parseFloat(qS[1]), parseFloat(qS[2]));
+  qS = qS.split("+");
+  username = qS[4];
+  port = qS[0];
+  set_settings(parseFloat(qS[1]), parseFloat(qS[2]), parseFloat(qS[3]));
+
   init(document.getElementById("maincanvas"));
-  loadMap("Cave");
-  player = addobject(0, canvasy - 50, 20, 20, "#000000", "imag", true, "Images/PlayerRectangleSimple.png");
-  control(player);
-  score = addobject(canvasx - 100, 20, 40, 10, "#000000", "text", false, "Points : 0",false);
-  key = addobject(canvasx - 40, canvasy - 60, 20, 20, "#000000", "rect");
-  target(key);
-  socket.emit('init', player);
+
+  change_map();
+  player = addobject(0, canvasy - 40, 18, 18, "#000000", "imag", true, "Images/PlayerRectangleSimple.png");
+  control(player, username);
+  score = addobject(canvasx - 100, 20, 40, 10, "#000000", "text", false, "Points : 0", false);
+
+  socket.emit('init', player, port);
   ticklist(function () {
     score["source"] = points;
   });
   ticklist(function () {
-    socket.emit('updateposition', [player["posx"] / scalex, player["posy"] / scaley]);
+    socket.emit('updateposition', [(player["posx"]), (player["posy"])]);
   });
   ticklist(function () {
-    if (key["touched"] == player){
-      socket.emit('win');
+    if (typeof key != "undefined"){
+      if (key["touched"] == player){
+        change_map();
+      }
     }
+    
   });
   socket.on('getallplayers', function(data) {
-    console.log("got players")
-    console.log(data)
     for (const t in data){
-      console.log(t)
       Objects.push(data[t])
+      followtext = addobject(data[t]["posx"], data[t]["posx"], 20, 10, "#000000", "text", false, data[t]["username"], false);
+      followtext["clearable"] = false;
+      followtext["playerid"] = data[t]["playerid"];
     }
-  })
+  });
   
   socket.on('getposition', function(data) {
     for (i = 0; i < Objects.length; i++) {
-      if (Objects[i]["playerid"] == data[0]) {
-        Objects[i]["posx"] = data[1][0] * scalex;
-        Objects[i]["posy"] = data[1][1] * scaley;
+      if (typeof Objects[i] != "undefined"){
+        if (Objects[i]["playerid"] == data[0]) {
+          if (Objects[i]["type"] == "text"){
+            Objects[i]["posx"] = data[1][0] - 5;
+            Objects[i]["posy"] = data[1][1] - 10;
+          }
+          else{
+            Objects[i]["posx"] = data[1][0];
+            Objects[i]["posy"] = data[1][1]; 
+          }
+        }
       }
     }
-  })
+  });
   
   socket.on('newplayer', function (data) {
     Objects.push(data);
-  })
+    followtext = addobject(data["posx"], data["posx"], 20, 10, "#000000", "text", false, data["username"], false);
+    followtext["clearable"] = false;
+    followtext["playerid"] = data["playerid"];
+  });
   
   socket.on('lostplayer', function (data) {
     for (i = 0; i < Objects.length; i++) {
@@ -93,6 +145,6 @@ function onload_game() {
         delete Objects[i];
       }
     }
-  })
+  });
 }
 

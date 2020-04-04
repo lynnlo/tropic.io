@@ -1,4 +1,4 @@
-// Coconut Engine V 1.2.4
+// Coconut Engine V 1.2.5
 // Created By Lynn Ong
 
 var Objects = [];
@@ -7,6 +7,7 @@ var functionlist = [];
 var canvas;
 var context;
 var screenx;
+var screeny;
 var scaley;
 var canvasx;
 var canvasy;
@@ -17,6 +18,7 @@ var scalefactor;
 var jumpedcool;
 var jumped;
 var backgroundimage;
+var removeall;
 
 // Settings
 var slowmofactor = 1;
@@ -29,16 +31,14 @@ var jumpcooldown;
 // Set up the engine
 function init(maincanvas) {
   canvas = maincanvas;
-  screenx = screen.width;
-  screeny = screen.height;
-  canvasx = screen.width / 2;
-  canvasy = screen.height / 2;
-  scalex = screenx / canvasx;
-  scaley = screeny / canvasy;
-  canvas.width = canvasx * scalex;
-  canvas.height = canvasy * scaley;
-  canvas.style.width = (canvasx * scalex).toString() + "px";
-  canvas.style.height = (canvasy * scaley).toString() + "px";
+  screenx = 1440;
+  screeny = 900;
+  canvasx = screen.width / 1.5;
+  canvasy = screen.height / 1.5;
+  canvas.width = canvasx;
+  canvas.height = canvasy;
+  //canvas.style.width = (screen.width).toString() + "px";
+  //canvas.style.height = (screen.height).toString() + "px";
   context = canvas.getContext("2d");
   ticker = setInterval(ontick, 10 * slowmofactor);
   ontick();
@@ -46,13 +46,14 @@ function init(maincanvas) {
 
 // Adds an instance to the Objects list
 function addobject(posx, posy, width, height, color = "#000000", type = "rect", followsgravity = true, source = NaN, solid = true) {
-  posx = posx * scalex;
-  posy = posy * scaley;
-  width = width * scalex;
-  height = height * scaley;
+  posx = posx;
+  posy = posy;
+  width = width;
+  height = height;
   isplayer = false;
   removeinticks = 500;
   points = 0;
+  clearable = true;
   Objects.push({
     posx,
     posy,
@@ -66,15 +67,31 @@ function addobject(posx, posy, width, height, color = "#000000", type = "rect", 
     isplayer,
     removeinticks,
     points,
+    clearable,
   });
   return Objects[Objects.length - 1];
 }
 
 // Does this every tick (10 ms)
 function ontick() {
+  // Checks if objects should be removed
+  if (removeall){
+    for (f = 0; f < Objects.length; f++){
+      if (Objects[f]["clearable"]){
+        delete Objects[f]
+      }
+      else{
+        Objects[f]["posx"] = 0;
+        Objects[f]["posy"] = (canvasy - 40);
+      }
+    }
+    Objects = Objects.filter(g => Object.keys(g).length !== 0);
+    removeall = false;
+  }
+
   //Clears the screen
   if (disableclear == false) {
-    context.clearRect(0, 0, canvasx * scalex, canvasy * scaley);
+    context.clearRect(0, 0, canvasx, canvasy);
   }
   // Sets the background image
   if (backgroundimage != "") {
@@ -91,27 +108,35 @@ function ontick() {
     // Checks for collisions
     collisionlog = [];
     for (d = 0; d < Objects.length; d++) {
-      if (d != i && Objects[d]["solid"]) {
-        collide(Objects[i], Objects[d], collisionlog);
+      if (typeof Objects[d] !== "undefined" ){
+        try{
+          if (d != i && Objects[d]["solid"]) {
+            collide(Objects[i], Objects[d], collisionlog);
+          }
+        }
+        catch{
+          collisionlog = [];
+        }
+        
       }
     }
     // Adds a gravitational pull to the object
     if (Objects[i]["posy"] + Objects[i]["height"] <= canvas.height && collisionlog["b"] != true && gravity == true && Objects[i]["followsgravity"] == true) {
-      Objects[i]["posy"] += gravityfacor * scaley;
+      Objects[i]["posy"] += gravityfacor;
     }
     // Moves the controlled object
     if (Objects[i]["isplayer"]) {
-      if (keyspressed["w"] && Objects[i]["posy"] - movementfactor * scaley >= 0 && collisionlog["t"] != true) {
-        Objects[i]["posy"] -= movementfactor * scaley;
+      if (keyspressed["w"] && Objects[i]["posy"] - movementfactor >= 0 && collisionlog["t"] != true) {
+        Objects[i]["posy"] -= movementfactor;
       }
-      if (keyspressed["a"] && Objects[i]["posx"] - movementfactor * scaley >= 0 && collisionlog["l"] != true) {
-        Objects[i]["posx"] -= movementfactor * scalex;
+      if (keyspressed["a"] && Objects[i]["posx"] - movementfactor >= 0 && collisionlog["l"] != true) {
+        Objects[i]["posx"] -= movementfactor;
       }
-      if (keyspressed["s"] && Objects[i]["posy"] + Objects[i]["height"] + movementfactor * scaley <= screeny && collisionlog["b"] != true) {
-        Objects[i]["posy"] += movementfactor * scaley;
+      if (keyspressed["s"] && Objects[i]["posy"] + Objects[i]["height"] + movementfactor <= screeny && collisionlog["b"] != true) {
+        Objects[i]["posy"] += movementfactor;
       }
-      if (keyspressed["d"] && Objects[i]["posx"] + Objects[i]["width"] + movementfactor * scalex <= screenx && collisionlog["r"] != true) {
-        Objects[i]["posx"] += movementfactor * scalex;
+      if (keyspressed["d"] && Objects[i]["posx"] + Objects[i]["width"] + movementfactor <= screenx && collisionlog["r"] != true) {
+        Objects[i]["posx"] += movementfactor;
       }
     }
     // Draws the object
@@ -127,7 +152,7 @@ function ontick() {
       if (Number.isInteger(Objects[i]["height"]) || Objects[i]["height"] == NaN) {
         Objects[i]["height"] = "serif";
       }
-      context.font = (Objects[i]["width"] / scalex).toString() + "px " + Objects[i]["height"].toString();
+      context.font = (Objects[i]["width"]).toString() + "px " + Objects[i]["height"].toString();
       context.fillText(Objects[i]["source"], Objects[i]["posx"], Objects[i]["posy"]);
     } else if (Objects[i]["type"] == "imag") {
       img = new Image(Objects[i]["width"], Objects[i]["height"])
@@ -151,13 +176,13 @@ function collide(a, b, collisionlist) {
   bb = b["posy"] + b["height"];
   bl = b["posx"];
   br = b["posx"] + b["width"];
-  if (ab > bt - 1 && al < br && ar > bl && at < bt){
+  if (ab > bt - 2 && al < br && ar > bl && at < bt){
     if (a["key"]){
       a["touched"] = b
     }
     collisionlist["b"] = true;
   }
-  if  (at - 1 < bb && al < br && ar > bl && ab > bb){
+  if  (at - 2 < bb && al < br && ar > bl && ab > bb){
     if (a["key"]){
       a["touched"] = b
     }
@@ -197,10 +222,12 @@ function ticklist(functionname, task = "add") {
 }
 
 // Gives the player control over an object
-function control(a) {
+function control(a, u = 'Player') {
   jumpedcool = 0;
   jumped = false;
   a["isplayer"] = true;
+  a["clearable"] = false;
+  a["username"] = u;
   if (gravity) {
     document.onkeydown = function kd(key) {
       if (key.which == 32) {
@@ -221,7 +248,7 @@ function control(a) {
                 }
               }
               if (a["posy"] >= 0 && collisionlog["t"] != true) {
-                a["posy"] -= (4 + (0.2 * jp)) * scaley;
+                a["posy"] -= (4 + (0.2 * jp));
               }
             }, 10 * slowmofactor * i);
           }
@@ -288,10 +315,10 @@ function control(a) {
 
 // Set's the target object
 function target(a){
-  a["key"] = true
-  a["followsgravity"] = false
-  a["type"] = "rect"
-  a["color"] = "#2020a0"
+  a["key"] = true;
+  a["followsgravity"] = false;
+  a["type"] = "rect";
+  a["color"] = "#2020a0";
 }
 
 // Change settings
