@@ -13,7 +13,7 @@ var output2;
 var output3;
 var fs = false;
 
-function onload_index(){
+function onload_index() {
   input1 = document.getElementById("port");
 
   slider1 = document.getElementById("down");
@@ -43,7 +43,7 @@ function onload_index(){
   input1.value = Math.random() * 100000000000000000
 }
 
-function connectconector(){
+function connectconector() {
   pt = input1.value;
   jcd = slider1.value;
   mf = (slider2.value / 10) * 2;
@@ -51,17 +51,17 @@ function connectconector(){
   window.location = "connector.html" + "?" + pt + "+" + jcd + "+" + mf + "+" + gf;
 }
 
-function change_map(){
+function change_map() {
   removeall = true;
-  setTimeout(function(){
-    if (map == 1){
+  setTimeout(function () {
+    if (map == 1) {
       loadMap("Cave");
     }
   }, 20 * slowmofactor)
-  
+
 }
 
-function onload_connector(){
+function onload_connector() {
   input2 = document.getElementById("username");
   output3 = document.getElementById("link");
 
@@ -71,7 +71,7 @@ function onload_connector(){
   qS = qS.split("+")
 }
 
-function connectgame(){
+function connectgame() {
   window.location = "game.html" + "?" + qS[0] + "+" + qS[1] + "+" + qS[2] + "+" + qS[3] + "+" + input2.value;
 }
 
@@ -99,46 +99,45 @@ function onload_game() {
     socket.emit('updateposition', [(player["posx"]), (player["posy"])]);
   });
   ticklist(function () {
-    if (typeof key != "undefined"){
-      if (key["touched"] == player){
+    if (typeof key != "undefined") {
+      if (key["touched"] == player) {
         change_map();
       }
     }
-    
+
   });
-  socket.on('getallplayers', function(data) {
-    for (const t in data){
+  socket.on('getallplayers', function (data) {
+    for (const t in data) {
       Objects.push(data[t])
       followtext = addobject(data[t]["posx"], data[t]["posx"], 20, 10, "#000000", "text", false, data[t]["username"], false);
       followtext["clearable"] = false;
       followtext["playerid"] = data[t]["playerid"];
     }
   });
-  
-  socket.on('getposition', function(data) {
+
+  socket.on('getposition', function (data) {
     for (i = 0; i < Objects.length; i++) {
-      if (typeof Objects[i] != "undefined"){
+      if (typeof Objects[i] != "undefined") {
         if (Objects[i]["playerid"] == data[0]) {
-          if (Objects[i]["type"] == "text"){
+          if (Objects[i]["type"] == "text") {
             Objects[i]["posx"] = data[1][0] - 5;
             Objects[i]["posy"] = data[1][1] - 10;
-          }
-          else{
+          } else {
             Objects[i]["posx"] = data[1][0];
-            Objects[i]["posy"] = data[1][1]; 
+            Objects[i]["posy"] = data[1][1];
           }
         }
       }
     }
   });
-  
+
   socket.on('newplayer', function (data) {
     Objects.push(data);
     followtext = addobject(data["posx"], data["posx"], 20, 10, "#000000", "text", false, data["username"], false);
     followtext["clearable"] = false;
     followtext["playerid"] = data["playerid"];
   });
-  
+
   socket.on('lostplayer', function (data) {
     for (i = 0; i < Objects.length; i++) {
       if (Objects[i]["playerid"] == data) {
@@ -147,4 +146,3 @@ function onload_game() {
     }
   });
 }
-

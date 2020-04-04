@@ -75,12 +75,11 @@ function addobject(posx, posy, width, height, color = "#000000", type = "rect", 
 // Does this every tick (10 ms)
 function ontick() {
   // Checks if objects should be removed
-  if (removeall){
-    for (f = 0; f < Objects.length; f++){
-      if (Objects[f]["clearable"]){
+  if (removeall) {
+    for (f = 0; f < Objects.length; f++) {
+      if (Objects[f]["clearable"]) {
         delete Objects[f]
-      }
-      else{
+      } else {
         Objects[f]["posx"] = 0;
         Objects[f]["posy"] = (canvasy - 40);
       }
@@ -108,7 +107,7 @@ function ontick() {
     // Checks for collisions
     collisionlog = [];
     for (d = 0; d < Objects.length; d++) {
-      if (typeof Objects[d] !== "undefined" ){
+      if (typeof Objects[d] !== "undefined") {
         if (d != i && Objects[d]["solid"]) {
           collide(Objects[i], Objects[d], collisionlog);
         }
@@ -162,7 +161,7 @@ function ontick() {
 
 // Checks for a collision
 function collide(a, b, collisionlist) {
-  if (typeof a !== "undefined" ){
+  if (typeof a !== "undefined") {
     at = a["posy"];
     ab = a["posy"] + a["height"];
     al = a["posx"];
@@ -171,26 +170,26 @@ function collide(a, b, collisionlist) {
     bb = b["posy"] + b["height"];
     bl = b["posx"];
     br = b["posx"] + b["width"];
-    if (ab > bt - 2 && al < br && ar > bl && at < bt){
-      if (a["key"]){
+    if (ab > bt - 2 && al < br && ar > bl && at < bt) {
+      if (a["key"]) {
         a["touched"] = b
       }
       collisionlist["b"] = true;
     }
-    if  (at - 2 < bb && al < br && ar > bl && ab > bb){
-      if (a["key"]){
+    if (at - 2 < bb && al < br && ar > bl && ab > bb) {
+      if (a["key"]) {
         a["touched"] = b
       }
       collisionlist["t"] = true;
-    } 
-    if  (ar > bl - 2 && at < bb && ab > bt && al < bl){
-      if (a["key"]){
+    }
+    if (ar > bl - 2 && at < bb && ab > bt && al < bl) {
+      if (a["key"]) {
         a["touched"] = b
       }
       collisionlist["r"] = true;
     }
-    if  (al - 2 < br && at < bb && ab > bt && ar > br){
-      if (a["key"]){
+    if (al - 2 < br && at < bb && ab > bt && ar > br) {
+      if (a["key"]) {
         a["touched"] = b
       }
       collisionlist["l"] = true;
@@ -239,8 +238,8 @@ function control(a, u = 'Player') {
               jp -= 1;
               collisionlog = [];
               for (d = 0; d < Objects.length; d++) {
-                if (typeof Objects[d] !== "undefined" ){
-                  if (d != a && Objects[d]["solid"]){
+                if (typeof Objects[d] !== "undefined") {
+                  if (d != a && Objects[d]["solid"]) {
                     collide(a, Objects[d], collisionlog);
                   }
                 }
@@ -312,7 +311,7 @@ function control(a, u = 'Player') {
 }
 
 // Set's the target object
-function target(a){
+function target(a) {
   a["key"] = true;
   a["followsgravity"] = false;
   a["type"] = "rect";
@@ -320,7 +319,7 @@ function target(a){
 }
 
 // Change settings
-function set_settings(jcd = 60, mf = 2, gf = 2){
+function set_settings(jcd = 60, mf = 2, gf = 2) {
   jumpcooldown = jcd;
   movementfactor = mf;
   gravityfacor = gf;

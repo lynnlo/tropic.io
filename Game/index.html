@@ -1,40 +1,43 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="style.css" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <h1 class="title"> Tropic.io Server Creator </h1>
-    </head>
-    <body onload = "onload_index()">
-        <script src = "engine.js"></script>
-        <script src="game.js"> </script>
-        <br>
-        <label>Port Number</label><br>
-        <input type="text" id="port"><br>
-        <div class="slidecontainer">
-            <div>
-                <h6>Jump Cooldown</h6>
-                <input type="range" min="0" max="200" value="100" id="down" class="slider">
-                <p>Jump Cooldown : <span id="cooldown"></span></p>
-            </div>
 
-            <div>
-                <h6>Movement Speed</h6>
-                <input type="range" min="1" max="20" value="10" id="move" class="slider">
-                <p>Movement Speed : <span id="movement"></span></p>
-            </div>
-            
-            <div>
-                <h6>Gravity</h6>
-                <input type="range" min="1" max="20" value="10" id="grav" class="slider">
-                <p>Gravity : <span id="gravity"></span></p>
-            </div>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <h1 class="title"> Tropic.io Server Creator </h1>
+</head>
+
+<body onload="onload_index()">
+    <script src="engine.js"></script>
+    <script src="game.js"> </script>
+    <br>
+    <label>Port Number</label><br>
+    <input type="text" id="port"><br>
+    <div class="slidecontainer">
+        <div>
+            <h6>Jump Cooldown</h6>
+            <input type="range" min="0" max="200" value="100" id="down" class="slider">
+            <p>Jump Cooldown : <span id="cooldown"></span></p>
         </div>
 
-        <br>
-        <button onclick="connectconector()" style="font-weight: 500"> Deploy Server! </button>
+        <div>
+            <h6>Movement Speed</h6>
+            <input type="range" min="1" max="20" value="10" id="move" class="slider">
+            <p>Movement Speed : <span id="movement"></span></p>
+        </div>
 
-    </body>
+        <div>
+            <h6>Gravity</h6>
+            <input type="range" min="1" max="20" value="10" id="grav" class="slider">
+            <p>Gravity : <span id="gravity"></span></p>
+        </div>
+    </div>
+
+    <br>
+    <button onclick="connectconector()" style="font-weight: 500"> Deploy Server! </button>
+
+</body>
+
 </html>
 
 <!--
