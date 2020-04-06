@@ -82,7 +82,7 @@ function ontick() {
       }
       else{
         Objects[f]["posx"] = 0;
-        Objects[f]["posy"] = (canvasy - 40);
+        Objects[f]["posy"] = (canvasy - 60);
       }
     }
     Objects = Objects.filter(g => Object.keys(g).length !== 0);
@@ -126,10 +126,10 @@ function ontick() {
       if (keyspressed["a"] && Objects[i]["posx"] - movementfactor >= 0 && collisionlog["l"] != true) {
         Objects[i]["posx"] -= movementfactor;
       }
-      if (keyspressed["s"] && Objects[i]["posy"] + Objects[i]["height"] + movementfactor <= screeny && collisionlog["b"] != true) {
+      if (keyspressed["s"] && Objects[i]["posy"] + Objects[i]["height"] + movementfactor <= canvasy && collisionlog["b"] != true) {
         Objects[i]["posy"] += movementfactor;
       }
-      if (keyspressed["d"] && Objects[i]["posx"] + Objects[i]["width"] + movementfactor <= screenx && collisionlog["r"] != true) {
+      if (keyspressed["d"] && Objects[i]["posx"] + Objects[i]["width"] + movementfactor <= canvasx && collisionlog["r"] != true) {
         Objects[i]["posx"] += movementfactor;
       }
     }
