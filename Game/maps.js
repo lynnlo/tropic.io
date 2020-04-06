@@ -50,7 +50,7 @@ function loadMap(map) {
     addobject(80, canvasy - (80), 20, 60, "#505050", "imag", false, "Images/MaterialSand.png");
     addobject(100, canvasy - (80), 20, 60, "#505050", "imag", false, "Images/MaterialSand.png")
     addobject(120, canvasy - (80), 20, 60, "#505050", "imag", false, "Images/MaterialSand.png");
-    
+
     addobject(150, canvasy - (120), 60, 20, "#505050", "imag", false, "Images/MaterialSand.png");
     addobject(230, canvasy - (140), 60, 20, "#505050", "imag", false, "Images/MaterialSand.png");
 
@@ -90,11 +90,11 @@ function loadMap(map) {
 
     addobject(240, canvasy - (120), 20, 100, "#505050", "imag", false, "Images/MaterialSand.png")
     addobject(280, canvasy - (80), 20, 60, "#505050", "imag", false, "Images/MaterialSand.png");
-    
+
     addobject(360, canvasy - (60), 20, 40, "#505050", "imag", false, "Images/MaterialSand.png")
     addobject(400, canvasy - (80), 20, 60, "#505050", "imag", false, "Images/MaterialSand.png");
     addobject(440, canvasy - (100), 20, 80, "#505050", "imag", false, "Images/MaterialSand.png")
-    
+
     addobject(480, canvasy - (160), 120, 20, "#505050", "imag", false, "Images/MaterialSand.png")
     addobject(620, canvasy - (140), 80, 20, "#505050", "imag", false, "Images/MaterialSand.png")
     addobject(720, canvasy - (180), 80, 20, "#505050", "imag", false, "Images/MaterialSand.png")
@@ -207,7 +207,7 @@ function loadMap(map) {
   if (map == "Lobby") {
     changecanvas("#a0a0a0");
     addobject(0, canvasy - (20), canvasx, 20, "#505050", "rect", false);
-    
+
     key = addobject(canvasx - 40, canvasy - 60, 20, 20, "#000000", "rect");
     target(key);
   }
