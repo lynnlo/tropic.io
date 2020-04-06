@@ -1,8 +1,8 @@
 var player;
 var socket;
 var username = '';
+var onmap = 0;
 var points = 0;
-var map = 1;
 var port;
 var input1;
 var input2;
@@ -12,6 +12,7 @@ var slider2;
 var output2;
 var output3;
 var fs = false;
+var mapchanged = false;
 
 function onload_index() {
   input1 = document.getElementById("port");
@@ -53,12 +54,34 @@ function connectconector() {
 
 function change_map() {
   removeall = true;
-  setTimeout(function () {
-    if (map == 1) {
-      loadMap("Cave");
+  setTimeout(function(){
+    mapchanged = false;
+    if (onmap == 0){
+      loadMap("Lobby");
+    }
+    else if (onmap == 1){
+      loadMap("Beach");
+    }
+    else if (onmap == 2){
+      loadMap("Beach2");
+    }
+    else if (onmap == 3){
+      loadMap("Beach3");
+    }
+    else if (onmap == 4){
+      loadMap("Beach4");
+    }
+    else if (onmap == 5){
+      loadMap("Beach5");
+    }
+    else if (onmap == 6){
+      loadMap("Beach6");
+    }
+    else if (onmap >= 7){
+      onmap = 0;
+      loadMap("Lobby");
     }
   }, 20 * slowmofactor)
-
 }
 
 function onload_connector() {
@@ -87,20 +110,24 @@ function onload_game() {
   init(document.getElementById("maincanvas"));
 
   change_map();
-  player = addobject(0, canvasy - 40, 18, 18, "#000000", "imag", true, "Images/PlayerRectangleSimple.png");
+  player = addobject(0, canvasy - 60, 18, 18, "#000000", "imag", true, "Images/PlayerRectangleSimple.png");
   control(player, username);
-  score = addobject(canvasx - 100, 20, 40, 10, "#000000", "text", false, "Points : 0", false);
+  score = addobject(canvasx - 200, 100, 40, 10, "#000000", "text", false, "Points : 0", false);
 
   socket.emit('init', player, port);
   ticklist(function () {
-    score["source"] = points;
+    score["source"] = "Points :" + points;
   });
   ticklist(function () {
     socket.emit('updateposition', [(player["posx"]), (player["posy"])]);
   });
   ticklist(function () {
-    if (typeof key != "undefined") {
-      if (key["touched"] == player) {
+    if (typeof key != "undefined"){
+      if (key["touched"] == player && mapchanged == false){
+        socket.emit('win');
+        points += 1;
+        mapchanged = true;
+        onmap += 1;
         change_map();
       }
     }
@@ -137,6 +164,11 @@ function onload_game() {
     followtext["clearable"] = false;
     followtext["playerid"] = data["playerid"];
   });
+  
+  socket.on('changeallmaps', function(){
+    onmap += 1;
+    change_map();
+  })
 
   socket.on('lostplayer', function (data) {
     for (i = 0; i < Objects.length; i++) {

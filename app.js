@@ -32,11 +32,17 @@ io.on('connect', function (socket) {
         io.to(socket.id).emit('getallplayers', rooms[room]);
         rooms[room][socket.id] = data;
     })
-    socket.on('updateposition', function (data) {
+
+    socket.on('updateposition', function (data){
         socket.to(socket.room).emit('getposition', [socket.id, data]);
         rooms[socket.room][socket.id]["posx"] = data[0];
         rooms[socket.room][socket.id]["posy"] = data[1];
     })
+
+    socket.on('win', function () {
+      socket.to(socket.room).emit('changeallmaps');
+    })
+
     socket.on('disconnect', function () {
         io.to(socket.room).emit('lostplayer', socket.id);
         delete rooms[socket.room][socket.id];
