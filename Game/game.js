@@ -54,30 +54,23 @@ function connectconector() {
 
 function change_map() {
   removeall = true;
-  setTimeout(function(){
+  setTimeout(function () {
     mapchanged = false;
-    if (onmap == 0){
+    if (onmap == 0) {
       loadMap("Lobby");
-    }
-    else if (onmap == 1){
+    } else if (onmap == 1) {
       loadMap("Beach");
-    }
-    else if (onmap == 2){
+    } else if (onmap == 2) {
       loadMap("Beach2");
-    }
-    else if (onmap == 3){
+    } else if (onmap == 3) {
       loadMap("Beach3");
-    }
-    else if (onmap == 4){
+    } else if (onmap == 4) {
       loadMap("Beach4");
-    }
-    else if (onmap == 5){
+    } else if (onmap == 5) {
       loadMap("Beach5");
-    }
-    else if (onmap == 6){
+    } else if (onmap == 6) {
       loadMap("Beach6");
-    }
-    else if (onmap >= 7){
+    } else if (onmap >= 7) {
       onmap = 0;
       loadMap("Lobby");
     }
@@ -122,8 +115,8 @@ function onload_game() {
     socket.emit('updateposition', [(player["posx"]), (player["posy"])]);
   });
   ticklist(function () {
-    if (typeof key != "undefined"){
-      if (key["touched"] == player && mapchanged == false){
+    if (typeof key != "undefined") {
+      if (key["touched"] == player && mapchanged == false) {
         socket.emit('win');
         points += 1;
         mapchanged = true;
@@ -164,8 +157,8 @@ function onload_game() {
     followtext["clearable"] = false;
     followtext["playerid"] = data["playerid"];
   });
-  
-  socket.on('changeallmaps', function(){
+
+  socket.on('changeallmaps', function () {
     onmap += 1;
     change_map();
   })
